@@ -69,9 +69,9 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
                 print(isLastPage);
               },
               itemBuilder: (context, index) => AnimatedBuilder(
-                    animation: _controller,
-                    builder: (context, child) => animatedPageViewBuilder(index),
-                  ),
+                animation: _controller,
+                builder: (context, child) => animatedPageViewBuilder(index),
+              ),
             ),
             Positioned(
               left: 30.0,
@@ -108,52 +108,62 @@ class _MyAppState extends State<MyApp> with TickerProviderStateMixin {
       delta = _controller.page - index;
       y = delta.abs().clamp(0.0, 1.0);
     }
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Image.asset(page.imageUrl),
-        Container(
-          margin: EdgeInsets.only(left: 12.0),
-          height: 100.0,
-          child: Stack(
-            children: <Widget>[
-              Opacity(
-                opacity: .10,
-                child: GradientText(
-                  page.title,
-                  gradient: LinearGradient(colors: page.titleGradient),
-                  style: TextStyle(
-                      fontSize: 100.0,
-                      fontFamily: "Montserrat-Black",
-                      letterSpacing: 1.0),
-                ),
+    return SingleChildScrollView(
+      child: SafeArea(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            SizedBox(
+              height: 20.0,
+            ),
+            Image.asset(
+              page.imageUrl,
+              height: 250.0,
+              width: double.infinity,
+            ),
+            Container(
+              height: 100.0,
+              child: Stack(
+                children: <Widget>[
+                  GradientText(
+                    page.title,
+                    gradient: LinearGradient(colors: page.titleGradient),
+                    style: TextStyle(
+                        fontSize: 70.0, fontFamily: "Montserrat-Black"),
+                    textAlign: TextAlign.center,
+                  ),
+                  Opacity(
+                    opacity: .10,
+                    child: GradientText(
+                      page.title,
+                      gradient: LinearGradient(colors: page.titleGradient),
+                      style: TextStyle(
+                          fontSize: 100.0,
+                          fontFamily: "Montserrat-Black",
+                          letterSpacing: 1.0),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 30.0, left: 22.0),
-                child: GradientText(
-                  page.title,
-                  gradient: LinearGradient(colors: page.titleGradient),
-                  style:
-                      TextStyle(fontSize: 70.0, fontFamily: "Montserrat-Black"),
+            ),
+            Container(
+              transform: Matrix4.translationValues(0, 50.0 * y, 0),
+              child: Text(
+                page.body,
+                style: TextStyle(
+                  fontSize: 20.0,
+                  fontFamily: "Montserrat-Medium",
+                  color: Color(0xFF9B9B9B),
                 ),
+                textAlign: TextAlign.center,
               ),
-            ],
-          ),
+            )
+          ],
         ),
-        Container(
-          padding: const EdgeInsets.only(left: 34.0, top: 12.0),
-          transform: Matrix4.translationValues(0, 50.0 * y, 0),
-          child: Text(
-            page.body,
-            style: TextStyle(
-                fontSize: 20.0,
-                fontFamily: "Montserrat-Medium",
-                color: Color(0xFF9B9B9B)),
-          ),
-        )
-      ],
+      ),
     );
   }
 }
